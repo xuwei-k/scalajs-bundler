@@ -1,9 +1,11 @@
 val scalaJSVersion = sys.env.getOrElse("SCALAJS_VERSION", "1.3.0")
 
+
 lazy val `scalajs-bundler-linker` =
   project.in(file("scalajs-bundler-linker"))
     .settings(
       scalaVersion := "2.12.11",
+      csrConfiguration := csrConfiguration.value.withChecksums(Vector()),
       libraryDependencies += "org.scala-js" %% "scalajs-linker" % scalaJSVersion
     )
 
@@ -12,6 +14,7 @@ val `sbt-scalajs-bundler` =
     .enablePlugins(SbtPlugin, BuildInfoPlugin)
     .settings(commonSettings)
     .settings(
+      csrConfiguration := csrConfiguration.value.withChecksums(Vector()),
       description := "Module bundler for Scala.js projects",
       libraryDependencies += "com.google.jimfs" % "jimfs" % "1.2",
       libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.4",
@@ -31,6 +34,7 @@ val `sbt-web-scalajs-bundler` =
     .enablePlugins(SbtPlugin)
     .settings(commonSettings)
     .settings(
+      csrConfiguration := csrConfiguration.value.withChecksums(Vector()),
       // sbt-web-scalajs does not support sbt 1.2.x
       crossSbtVersions := List("1.3.0"),
       sbtVersion in pluginCrossBuild := "1.3.0",
@@ -53,6 +57,7 @@ val apiDoc =
     .enablePlugins(ScalaUnidocPlugin)
     .settings(noPublishSettings: _*)
     .settings(
+      csrConfiguration := csrConfiguration.value.withChecksums(Vector()),
       scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
         "-groups",
         "-doc-source-url", s"https://github.com/scalacenter/scalajs-bundler/blob/v${version.value}€{FILE_PATH}.scala",
@@ -69,6 +74,7 @@ val manual =
     .enablePlugins(OrnatePlugin)
     .settings(noPublishSettings: _*)
     .settings(
+      csrConfiguration := csrConfiguration.value.withChecksums(Vector()),
       scalaVersion := "2.12.11",
       ornateSourceDir := Some(sourceDirectory.value / "ornate"),
       ornateTargetDir := Some(ornateTarget.value),
@@ -115,6 +121,7 @@ inThisBuild(List(
 ))
 
 lazy val commonSettings = List(
+  csrConfiguration := csrConfiguration.value.withChecksums(Vector()),
   scriptedLaunchOpts ++= Seq(
     "-Dplugin.version=" + version.value,
     s"-Dscalajs.version=$scalaJSVersion",
