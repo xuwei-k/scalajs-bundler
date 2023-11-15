@@ -126,5 +126,3 @@ lazy val noPublishSettings =
     publish := {},
     publishLocal := {}
   )
-
-ivyLoggingLevel in ThisBuild := UpdateLogging.Quiet
